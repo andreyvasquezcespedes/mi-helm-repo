@@ -3,12 +3,12 @@ entries:
   teemii:
   - apiVersion: v2
     appVersion: latest
-    created: "2026-11-26T03:19:04.968014947Z"
+    created: "2026-11-26T03:24:33.884779268Z"
     description: El Reto Teemii-Helm El Lector de Manga
     digest: d7b1b16f8f10cacbdfb5b5aaf9e34d8437b1e182e15af30116d43a68e1125664
     name: teemii
     type: application
     urls:
-    - https://github.com/andreyvasquezcespedes/mi-helm-repo/teemii-0.1.0.tgz
+    - https://andreyvasquezcespedes.github.io/mi-helm-repo/teemii-0.1.0.tgz
     version: 0.1.0
-generated: "2026-11-26T03:19:04.966230442Z"
+generated: "2026-11-26T03:24:33.883561228Z"
