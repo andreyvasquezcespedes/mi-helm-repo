@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ include "teemii.fullname" . }}-db
+  labels:
+    {{- include "teemii.labels" . | nindent 4 }}
+spec:
+  serviceName: {{ include "teemii.fullname" . }}-db
+  replicas: 1
+  selector:
+    matchLabels:
+      app: teemii-db
+      app.kubernetes.io/instance: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app: teemii-db
+        app.kubernetes.io/instance: {{ .Release.Name }}
+    spec:
+      containers:
+        - name: postgres
+          image: "{{ .Values.database.image }}:{{ .Values.database.tag }}"
+          envFrom:
+            - secretRef:
+                name: {{ include "teemii.fullname" . }}-db-secret
+          ports:
+            - containerPort: 5432

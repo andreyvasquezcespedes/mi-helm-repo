@@ -1,0 +1,14 @@
+apiVersion: v1
+entries:
+  teemii:
+  - apiVersion: v2
+    appVersion: latest
+    created: "2026-11-26T02:56:50.280470863Z"
+    description: El Reto Teemii-Helm El Lector de Manga
+    digest: d7b1b16f8f10cacbdfb5b5aaf9e34d8437b1e182e15af30116d43a68e1125664
+    name: teemii
+    type: application
+    urls:
+    - teemii-0.1.0.tgz
+    version: 0.1.0
+generated: "2026-11-26T02:56:50.279880991Z"

@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "teemii.fullname" . }}-db
+  labels:
+    {{- include "teemii.labels" . | nindent 4 }}
+spec:
+  type: ClusterIP
+  selector:
+    app: teemii-db
+    app.kubernetes.io/instance: {{ .Release.Name }}
+  ports:
+    - port: 5432
+      targetPort: 5432

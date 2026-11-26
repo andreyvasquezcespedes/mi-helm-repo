@@ -1,0 +1,59 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "teemii.fullname" . }}-backend
+  labels:
+    {{- include "teemii.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.backend.replicas }}
+  selector:
+    matchLabels:
+      app: teemii-backend
+      app.kubernetes.io/instance: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app: teemii-backend
+        app.kubernetes.io/instance: {{ .Release.Name }}
+    spec:
+      initContainers:
+        - name: wait-for-db
+          image: busybox:1.36
+          command:
+            - sh
+            - -c
+            - |
+              until nc -z {{ include "teemii.fullname" . }}-db 5432; do
+                echo "Esperando a PostgreSQL..."; sleep 2;
+              done
+      containers:
+        - name: backend
+          image: "{{ .Values.backend.image }}:{{ .Values.backend.tag }}"
+          ports:
+            - containerPort: 3000
+            - containerPort: 1555
+          envFrom:
+            - configMapRef:
+                name: {{ include "teemii.fullname" . }}-backend-config
+            - secretRef:
+                name: {{ include "teemii.fullname" . }}-db-secret
+          volumeMounts:
+            - name: teemii-data
+              mountPath: /data
+      volumes:
+        - name: teemii-data
+          persistentVolumeClaim:
+            claimName: {{ include "teemii.fullname" . }}-backend-data
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ include "teemii.fullname" . }}-backend-data
+spec:
+  accessModes: ["ReadWriteOnce"]
+  {{- if .Values.backend.persistence.storageClass }}
+  storageClassName: {{ .Values.backend.persistence.storageClass }}
+  {{- end }}
+  resources:
+    requests:
+      storage: {{ .Values.backend.persistence.size }}
